@@ -42,6 +42,7 @@ pacman::p_load(knitr, bookdown, dplyr, kableExtra, readxl, xlsx)
 
 airdata <- read.xlsx("August2018Airpocalypse.xlsx", sheetIndex = 1)
 
+<<<<<<< HEAD
 test <- read.xlsx("August2018Airpocalypse.xlsx", sheetIndex = 1)
 
 
@@ -121,3 +122,5 @@ knitr::include_graphics("images/PSCAA_Seattle_NephData_Aug2018.png")
 
 kable(head(airdata, n=10), "latex", booktabs = T) %>% kable_styling(latex_options = "striped")
 ```
+=======
+>>>>>>> 1179267f32c3fd6e1d0a308150ec1e17fe687420
