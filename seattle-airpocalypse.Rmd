@@ -1,6 +1,6 @@
 ---
 title: |
-  | Indoor Air Quality & DIY HEPA Filter 
+  | Wildfires, Indoor Air, and DIY HEPA Filter 
   | Seattle Airpocalypse
 date: '22-23 August 2018'
 output:
@@ -14,7 +14,7 @@ linkcolor: blue
 urlcolor: blue
 ---
 
-```{r knitr.global.options, include=F}
+```{r knitr.global.options, include=F, eval=T}
 knitr::opts_chunk$set(echo=F, 
                       warning=F, 
                       fig.align='center', 
@@ -27,153 +27,97 @@ knitr::opts_chunk$set(echo=F,
 options(scipen=999)
 ```
 
-```{r load.packages, include=F}
+```{r load.packages, include=F, eval=T}
 # Load pacman, installing as necessary.
 my_repo <- 'http://cran.r-project.org'
 if (!require("pacman")) {install.packages("pacman", repos = my_repo)}
 
 # Load the other packages, installing as needed.
-pacman::p_load(knitr, bookdown, dplyr, kableExtra)
+pacman::p_load(knitr, bookdown, dplyr, kableExtra, readxl, xlsx)
 ```
 
 ```{r upload.and.clean.data, include=F, eval=F}
- ## Read in datasets for 2012-2016 county level estimates from USGS website https://water.usgs.gov/nawqa/pnsp/usage/maps/county-level/
 
-airdata <- read.delim('estimates/EPest.county.estimates.2012.txt', header=T)
+## Read in real-time monitoring dataset
+
+airdata <- read.xlsx("August2018Airpocalypse.xlsx", sheetIndex = 1)
+
+test <- read.xlsx("August2018Airpocalypse.xlsx", sheetIndex = 1)
+
 
 ```
 
-# Summary
+# Introduction
 
-Wildfires in California, Oregon, Washington, and British Columbia resulted in several poor air quality days in the summers of 2017 and 2018. Previously, the term ["airpocalypse" has been used in the headlines](https://abcnews.go.com/International/460-million-chinese-residents-suffering-airpocalypse/story?id=44329107) to describe smog events around the world. In August 2018, the Seattle Times ran a number of articles on the topic:
+Wildfires in California, Oregon, Washington, and British Columbia resulted in several poor air quality days in recent summers. Previously, the term ["airpocalypse" has been used in the headlines](https://abcnews.go.com/International/460-million-chinese-residents-suffering-airpocalypse/story?id=44329107) to describe smog events around the world. In 2018, the Seattle Times ran a number of articles on the topic:
 
-* [Aug 15, 2018: Smoke to clear up from Seattle skies but threatens return next week](https://www.seattletimes.com/seattle-news/weather/smoke-to-clear-up-from-seattle-skies-but-threatens-return-next-week/)
-* [Aug 16, 2018: As smoke hangs over Northwest study shows air pollution was already high](https://www.seattletimes.com/seattle-news/environment/as-smoke-hangs-over-northwest-study-shows-air-pollution-was-already-high/)
-* [Aug 19, 2018: Smoky air returns to Seattle through at least Wednesday](https://www.seattletimes.com/seattle-news/environment/smoky-air-returns-to-seattle-through-at-least-wednesday/)
-* [Aug 20, 2018: Washington's smoky air looks scary but UW physician says trust your body's defenses](https://www.seattletimes.com/seattle-news/health/washingtons-smoky-air-looks-scary-but-uw-physician-says-trust-your-bodys-defenses/)
-* [Aug 22, 2018: Seattle weather on verge of major shift back to normal](https://www.seattletimes.com/seattle-news/weather/seattle-weather-on-verge-of-major-shift-back-to-normal/)
-* [Aug 25, 2018: Changing winds bring smoke back to Seattle could stay through Sunday](https://www.seattletimes.com/seattle-news/changing-winds-bring-smoke-back-to-seattle-could-stay-through-sunday/)
-* [Aug 27, 2018: Yes, we can do something about the wildfire smoke](https://www.seattletimes.com/opinion/yes-we-can-do-something-about-the-wildfire-smoke/). 
+* [Aug 15: Seattle’s dirty air among world’s worst, but relief is in sight](https://www.seattletimes.com/seattle-news/weather/smoke-to-clear-up-from-seattle-skies-but-threatens-return-next-week/)
+* [Aug 16: As smoke hangs over Northwest study shows air pollution was already high](https://www.seattletimes.com/seattle-news/environment/as-smoke-hangs-over-northwest-study-shows-air-pollution-was-already-high/)
+* [Aug 19: Seattle pollution levels surge, as smoky air returns through at least Wednesday](https://www.seattletimes.com/seattle-news/environment/smoky-air-returns-to-seattle-through-at-least-wednesday/)
+* [Aug 20: Washington's smoky air looks scary but UW physician says trust your body's defenses](https://www.seattletimes.com/seattle-news/health/washingtons-smoky-air-looks-scary-but-uw-physician-says-trust-your-bodys-defenses/)
+* [Aug 22: Clean and green and good to go! Seattle air quality returns to normal](https://www.seattletimes.com/seattle-news/weather/seattle-weather-on-verge-of-major-shift-back-to-normal/)
+* [Aug 25: Seattle's smoke is clearing. Now it's up to rain and wind to finish the job](https://www.seattletimes.com/seattle-news/changing-winds-bring-smoke-back-to-seattle-could-stay-through-sunday/)
+* [Aug 27: Yes, we can do something about the wildfire smoke](https://www.seattletimes.com/opinion/yes-we-can-do-something-about-the-wildfire-smoke/) 
 
-The [Puget Sound Clean Air Agency](https://www.pscleanair.org/35/About-Us) provides valuable data to protect public health, improve neighborhood air quality, and reduce the region’s contribution to climate change. According to their monitors (nephalometer), the highest particulat
+The [Puget Sound Clean Air Agency](https://www.pscleanair.org/35/About-Us) collects and provides data to protect public health, improve neighborhood air quality, and reduce the region’s contribution to climate change. According to their monitors (nephalometer), the highest particulates 
 
-This report shares my family's findings from an at-home experiment that utilized real-time particle counting with a ([Dylos Air Quality Monitor](http://www.dylosproducts.com/learnabout.html) to evaluate the impact of a [do-it-yourself (DIY) high-efficiency particulate air (HEPA) filter](https://www.king5.com/article/news/local/this-diy-air-filter-for-wildfire-smoke-is-less-than-20/281-584346009) described by the Puget Sound Clean Air Agency.
+This report shares findings from an at-home experiment that utilized real-time particle counting with a ([Dylos Air Quality Monitor](http://www.dylosproducts.com/learnabout.html) to evaluate the impact of a [do-it-yourself (DIY) high-efficiency particulate air (HEPA) filter](https://www.king5.com/article/news/local/this-diy-air-filter-for-wildfire-smoke-is-less-than-20/281-584346009) described by the Puget Sound Clean Air Agency.
 
+# Methods
 
------
+(ref:airfilter-front) Front of filter. 
 
-
-Table \@ref(tab:merged-tables) lists the rank and best available estimates of mass applied (kg) for the 80 most common agricultural pesticides in Yakima County during 2016, as reported by [USGS Estimated Annual Agricultural Pesticide Use](https://water.usgs.gov/nawqa/pnsp/usage/maps/county-level/) data. The table also includes rank by 3-year average (2014-2016) and 5-year average (2012-2016) estimates of mass applied. Rankings and estimates are based on the *EPest-high method* described by [Theilen and Stone (2013)](https://pubs.usgs.gov/sir/2013/5009/) and [Baker and Stone (2015)](https://pubs.usgs.gov/ds/0907/):
- > "EPest-low and EPest-high, are used to estimate a range of pesticide use. Both EPest-low and EPest-high methods incorporate proprietary surveyed rates for Crop Reporting Districts (CRDs), but EPest-low and EPest-high estimates differ in how they treat situations when a CRD was surveyed and pesticide use was not reported for a particular crop present in the CRD. In these situations, EPest-low assumes zero use in the CRD for that pesticide-by-crop combination. EPest-high, however, treats the unreported use for that pesticide-by- crop combination in the CRD as missing data. In this case, pesticide-by-crop use rates from neighboring CRDs or CRDs within the same region are used to estimate the pesticide-by-crop EPest-high rate for the CRD." [*-Pesticide National Synthesis Project webpage*](https://water.usgs.gov/nawqa/pnsp/usage/maps/about.php)
-
-USGS lists several caveats of these data, in particular:
-* Data for 2013-2016 are preliminary (i.e. "using projected county crop acres from the previous Census of Agriculture and are expected to be revised upon availability of updated crop acreages in the following Census of Agriculture")
-* Reliability decreases with scale (e.g. "detailed interpretation of where and how much use occurs within a county is not appropriate")
-* EPest-low estimates are more likely to reflect state-based restrictions on pesticide use than EPest-high estimates
-
-For a more detailed look at the range (EPest-low and EPest-high) of 1-yr, 3-yr, and 5-yr data, please see Tables \@ref(tab:table-1yr-2016), \@ref(tab:table-3yr-2014-2016), and \@ref(tab:table-5yr-2012-2016), respectively.
-
-```{r summary-1yr-2016, include=T, eval=F}
-# create 1 yr dataset that follows naming convention in 5 and 3 yr datasets
-yak.1yr <- yakima.2016
-
-# sort in terms of decreasing use
-yak.1yr <- yak.1yr[order(yak.1yr$EPEST_HIGH_KG, decreasing = T), ]
-
-# add rank
-yak.1yr$RANK_1YR <- 1:nrow(yak.1yr) 
- 
-# reorder variables
-yak.1yr <- yak.1yr[c("RANK_1YR", "COMPOUND", "EPEST_LOW_KG", "EPEST_HIGH_KG")]
-
-# round to integers
-yak.1yr$EPEST_LOW_KG  <- round(as.numeric(yak.1yr$EPEST_LOW_KG, digits = 0))
-yak.1yr$EPEST_HIGH_KG <- round(as.numeric(yak.1yr$EPEST_HIGH_KG, digits = 0))
-
-# table for 2016 low and high data
-row.names(yak.1yr) <- NULL
-colnames(yak.1yr)[colnames(yak.1yr)=="EPEST_LOW_KG"] <- "EPEST_LOW_KG_1YR_ONLY"
-colnames(yak.1yr)[colnames(yak.1yr)=="EPEST_HIGH_KG"] <- "EPEST_HIGH_KG_1YR_ONLY"
-
-#kable(head(yak.1yr, n=50), "latex", booktabs = T, caption = "Top 50 Pesticides Used in Yakima County, 1 Year, 2016") %>%
-
-#kable_styling(latex_options = c("striped", "scale_down"))
+```{r airfilter-front, fig.cap='(ref:airfilter-front)', out.width='90%', echo=F}
+knitr::include_graphics("images/airfilterfront.JPG")
 ```
 
-```{r summary-3yr-2014-2016, include=T, eval=F}
-# calculate arithmetic mean (avg) by compound for 3-year period (2014-2016)
-yak.3yr <- yakima.2014.2016 %>% group_by(COMPOUND) %>% summarize(EPEST_HIGH_KG_3YR_AVG=mean(EPEST_HIGH_KG), EPEST_LOW_KG_3YR_AVG=mean(EPEST_LOW_KG))
+(ref:airfilter-back) Back of filter. 
 
-# sort in terms of decreasing use
-yak.3yr <- yak.3yr[order(yak.3yr$EPEST_HIGH_KG_3YR_AVG, decreasing = T), ]
-
-# add rank
-yak.3yr$RANK_3YR <- 1:nrow(yak.3yr) 
-
-# reorder variables
-yak.3yr <- yak.3yr[c("RANK_3YR", "COMPOUND", "EPEST_LOW_KG_3YR_AVG", "EPEST_HIGH_KG_3YR_AVG")]
-
- # round to integers
-yak.3yr$EPEST_LOW_KG_3YR_AVG  <- round(as.numeric(yak.3yr$EPEST_LOW_KG_3YR_AVG, digits = 0))
-yak.3yr$EPEST_HIGH_KG_3YR_AVG <- round(as.numeric(yak.3yr$EPEST_HIGH_KG_3YR_AVG, digits = 0))
+```{r airfilter-back, fig.cap='(ref:airfilter-back)', out.width='90%', echo=F}
+knitr::include_graphics("images/airfilterback.JPG")
 ```
 
-```{r summary-5yr-2012-2016, include=T, eval=F}
-# calculate arithmetic mean (avg) by compound for 5-year period (2012-2016)
-yak.5yr <- yakima.2012.2016 %>% group_by(COMPOUND) %>% summarize(EPEST_HIGH_KG_5YR_AVG=mean(EPEST_HIGH_KG), EPEST_LOW_KG_5YR_AVG=mean(EPEST_LOW_KG))
+# Results
 
-# sort in terms of decreasing use
-yak.5yr <- yak.5yr[order(yak.5yr$EPEST_HIGH_KG_5YR_AVG, decreasing = T), ]
+(ref:time-series) Particle count time series for 0.5-1 micron bin. 
 
-# add rank
-yak.5yr$RANK_5YR <- 1:nrow(yak.5yr) 
-
-# reorder variables
-yak.5yr<- yak.5yr[c("RANK_5YR", "COMPOUND", "EPEST_LOW_KG_5YR_AVG", "EPEST_HIGH_KG_5YR_AVG")]
- 
-# round to integers
-yak.5yr$EPEST_LOW_KG_5YR_AVG  <- round(as.numeric(yak.5yr$EPEST_LOW_KG_5YR_AVG, digits = 0))
-yak.5yr$EPEST_HIGH_KG_5YR_AVG <- round(as.numeric(yak.5yr$EPEST_HIGH_KG_5YR_AVG, digits = 0))
+```{r time-series, fig.cap='(ref:time-series)', out.width='90%', echo=F}
+knitr::include_graphics("images/timeseries.JPG")
 ```
 
-```{r merged-tables, include=T, eval=F}
+\newpage
 
-# merge 5, 3, and 1 yr datasets
-merge.5yr.3yr <- merge(yak.5yr, yak.3yr, by = 'COMPOUND')
-merge.all     <- merge(merge.5yr.3yr, yak.1yr, by = 'COMPOUND')
+**TIME ACTIVITY PATTERN**
 
-# reorder variables
-final.2012.2016 <- merge.all[c("COMPOUND", "RANK_1YR", "RANK_3YR", "RANK_5YR", "EPEST_HIGH_KG_1YR_ONLY", "EPEST_HIGH_KG_3YR_AVG", "EPEST_HIGH_KG_5YR_AVG")]
+**WED (22 AUG 2018)**
 
-# sort in terms of decreasing use for 2016 data
-final.2012.2016 <- final.2012.2016[order(final.2012.2016$EPEST_HIGH_KG_1YR, decreasing = T), ]
+* 17:15 - started monitor and brought it out to front yard for ~2 min
+* 17:17 - sealed house
+* 20:25 - brought monitor back out to front yard for ~ 2 min
+* 20:30 - cooked dinner (1.5 hours)
+* 22:00 - opened doors for 5 min
+* 22:10 - sealed house and began running DIY HEPA filter in living room
+* 23:30 - moved monitor and DIY HEPA filter to bedroom
 
-# table for 1 yr (2016), 3 yr avg (2014-2016), and 5 yr avg (2012-2016)
-row.names(final.2012.2016) <- NULL
-kable(head(final.2012.2016, n=80), "latex", booktabs = T, caption = "Top 80 EPest-high Estimates for Yakima County, 1-Yr (2016), 3-Yr Avg (2014-2016), 5-Yr Avg (2012-2016)") %>%
-kable_styling(latex_options = c("striped", "scale_down"))
-# create csv file for final table
-write.csv(final.2012.2016, "~/pestuse/yakima.pesticide.use.2012-2016.csv", row.names=FALSE)
+**THU (23 AUG 2018)**
+
+* 2:55  - one person got up for bathroom or checked on baby?
+* 8:33  - moved monitor and DIY HEPA filter to living room
+* 12:00 - opened doors and windows
+
+(ref:pscaa) Local air data from August 2018. 
+
+```{r pscaa, fig.cap='(ref:pscaa)', out.width='90%', echo=F}
+knitr::include_graphics("images/PSCAA_Seattle_NephData_Aug2018.png")
 ```
 
- \newpage
+# Discussion
 
-# Appendices
+\newpage
 
-```{r table-1yr-2016, include=T, eval=F}
-#table for 2016 low and high data
-kable(head(yak.1yr, n=50), "latex", booktabs = T, caption = "Top 50 Estimates in Yakima County, Range (EPest-low and EPest-high), 1-Yr, 2016") %>%
-kable_styling(latex_options = c("striped", "scale_down"))
-```
+# Appendix
 
-```{r table-3yr-2014-2016, include=T, eval=F}
-#table for 2014-2016 low and high data
-kable(head(yak.3yr, n=50), "latex", booktabs = T, caption = "Top 50 Estimates in Yakima County, Range (EPest-low and EPest-high), 3-Yr Avg, 2014-2016") %>%
-kable_styling(latex_options = c("striped", "scale_down"))
-```
+```{r table-airdata, include=T, eval=F}
 
-```{r table-5yr-2012-2016, include=T, eval=F}
-#table for 2012-2016 low and high data
-kable(head(yak.5yr, n=50), "latex", booktabs = T, caption = "Top 50 Estimates in Yakima County, Range (EPest-low and EPest-high), 5-Yr Avg, 2012-2016") %>%
-kable_styling(latex_options = c("striped", "scale_down"))
+kable(head(airdata, n=10), "latex", booktabs = T) %>% kable_styling(latex_options = "striped")
 ```
