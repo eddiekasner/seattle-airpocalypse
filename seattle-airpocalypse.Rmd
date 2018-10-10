@@ -64,6 +64,8 @@ The [Puget Sound Clean Air Agency](https://www.pscleanair.org/35/About-Us) colle
 
 This report shares findings from an at-home experiment that utilized real-time particle counting with a ([Dylos Air Quality Monitor](http://www.dylosproducts.com/learnabout.html) to evaluate the impact of a [do-it-yourself (DIY) high-efficiency particulate air (HEPA) filter](https://www.king5.com/article/news/local/this-diy-air-filter-for-wildfire-smoke-is-less-than-20/281-584346009) described by the Puget Sound Clean Air Agency.
 
+An expert at the University of Washington was interviewed about [how smoke from forest fires affects your health](https://rightasrain.uwmedicine.org/well/health/forest-fire-smoke-health?mkt_tok=eyJpIjoiWXpjME5EQmtOakJpTldWaiIsInQiOiJZVGdrZ2NyaDlvZ2N6dDFzalo1dXE1MDg4SWRvTVkxTHpqUGtKY3pxSVZ0U0QwTjFUcXV4aEtaYTVuYlpsdGJTQkJKOTVcL0xqcUxEeVMrdnR5T0JSXC92a1ZDWjJ4OGN3R2JKa3YyKzVnRmdTeEwyOGVLVmNKME1yaUd4OVZCcURYIn0%3D)
+
 # Methods
 
 (ref:airfilter-front) Front of filter. 
